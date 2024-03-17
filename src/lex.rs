@@ -34,7 +34,18 @@ impl Lexer {
         }
     }
 
-    pub fn peek(&self) {}
+    pub fn peek(&self) {
+        match self.curPos {
+            Some(x) => {
+                if x + 1 >= self.source.len() {
+                    return '\0'
+                }
+                return self.source[x + 1];
+            },
+            None => return '\0',
+        }
+    }
+
     pub fn abort(&self, message: String) {}
     pub fn skipWhitespace(&self) {}
     pub fn skipComment(&self) {}
