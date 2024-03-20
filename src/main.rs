@@ -5,7 +5,7 @@ use std::io::Read;
 use std::env;
 
 fn main() {
-    let mut f = File::open("file.txt")?;
+    let mut f = File::open("examples/file.txt")?;
     let mut source: Vec<u8> = Vec::new();
 
     f.read_to_end(&mut source);
