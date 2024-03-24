@@ -1,1 +1,1 @@
-EXAMPLE
+LET foobar = 123
