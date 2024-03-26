@@ -1,5 +1,4 @@
-from lex import *;
-
+use lex::Lexer;
 use std::fs::File;
 use std::io::Read;
 use std::env;
