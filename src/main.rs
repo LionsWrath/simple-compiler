@@ -1,18 +1,23 @@
-use lex::Lexer;
+mod lex;
+
 use std::fs::File;
 use std::io::Read;
-use std::env;
 
-fn main() {
-    let mut f = File::open("examples/file.txt")?;
-    let mut source: Vec<u8> = Vec::new();
+use failure::Error;
 
-    f.read_to_end(&mut source);
+fn main() -> Result<(), Error>{
+    let mut f = File::open("src/examples/file2.txt")?;
+    let mut raw: Vec<u8> = Vec::new();
+    let _ = f.read_to_end(&mut raw);
+    let source: Vec<char> = raw.iter().map(|b| *b as char).collect::<Vec<_>>();
 
-    let mut lexer = new Lexer(&source);
+    let mut lexer = lex::Lexer::new(source);
+    let mut token = lexer.get_token();
 
-    while lexer.peek() != '\0' {
-        println!(lexer.curChar);
-        lexer.nextChar();
+    while !matches!(token.kind, lex::TokenType::EOF) {
+        println!("{:?} POS: {:?}", token, lexer.cur_pos);
+        token = lexer.get_token();
     }
+
+    return Ok(());
 }

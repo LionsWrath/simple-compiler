@@ -1,6 +1,7 @@
 [package]
 name = "simple-compiler"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
+failure = "0.1.8"
