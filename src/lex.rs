@@ -1,41 +1,41 @@
-struct Lexer {
-    source: String,
-    curChar: char,
-    curPos: Option<usize>,
-};
+pub struct Lexer {
+    pub source: Vec<char>,
+    pub cur_char: char,
+    pub cur_pos: Option<usize>,
+}
 
 impl Lexer {
 
-    pub fn new(source: &Vec<char>) -> Self {
-        let lexer = Lexer {
-           source: Vec<char>,
-           curChar: '',
-           curPos: None,
+    pub fn new(source: Vec<char>) -> Self {
+        let mut lexer = Lexer {
+           source: source,
+           cur_char: '\0',
+           cur_pos: None,
         };
 
-        lexer.nextChar();
+        lexer.next_char();
         lexer
     }
 
-    pub fn nextChar(&mut self) {
-        match self.curPos {
+    pub fn next_char(&mut self) {
+        match self.cur_pos {
             Some(x) =>  {
-                self.curPos = Some(x + 1);
+                self.cur_pos = Some(x + 1);
                 if x + 1 >= self.source.len() {
-                    self.curChar = '\0';
+                    self.cur_char = '\0';
                 } else {
-                    self.curChar = self.source[self.curPos];
+                    self.cur_char = self.source[x + 1];
                 }
             },
             None => {
-                self.curPos = Some(0);
-                self.curChar = self.source[0];
+                self.cur_pos = Some(0);
+                self.cur_char = self.source[0];
             }
         }
     }
 
-    pub fn peek(&self) {
-        match self.curPos {
+    pub fn peek(&self) -> char {
+        match self.cur_pos {
             Some(x) => {
                 if x + 1 >= self.source.len() {
                     return '\0'
@@ -47,7 +47,7 @@ impl Lexer {
     }
 
     pub fn abort(&self, message: String) {}
-    pub fn skipWhitespace(&self) {}
-    pub fn skipComment(&self) {}
-    pub fn getToken(&self) {}
+    pub fn skip_whitespace(&self) {}
+    pub fn skip_comment(&self) {}
+    pub fn get_token(&self) {}
 }
