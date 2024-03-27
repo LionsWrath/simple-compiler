@@ -1,5 +1,7 @@
 use std::fmt;
 
+const RADIX: u32 = 10;
+
 pub enum TokenType {
 	EOF = -1,
 	NEWLINE = 0,
@@ -42,6 +44,23 @@ impl Token {
         Token {
             text,
             kind
+        }
+    }
+
+    pub fn check_keyword(text_token: &Vec<char>) -> Option<TokenType> {
+        match text_token[..] {
+            ['L', 'A', 'B','E', 'L'] => Some(TokenType::LABEL),
+            ['G', 'O', 'T', 'O'] => Some(TokenType::GOTO),
+            ['P', 'R', 'I', 'N', 'T'] => Some(TokenType::PRINT),
+            ['I', 'N', 'P', 'U', 'T'] => Some(TokenType::INPUT),
+            ['L', 'E', 'T'] => Some(TokenType::LET),
+            ['I', 'F'] => Some(TokenType::IF),
+            ['T', 'H', 'E', 'N'] => Some(TokenType::THEN),
+            ['E', 'N', 'D', 'I', 'F'] => Some(TokenType::ENDIF),
+            ['W', 'H', 'I', 'L', 'E'] => Some(TokenType::WHILE),
+            ['R', 'E', 'P', 'E', 'A', 'T'] => Some(TokenType::REPEAT),
+            ['E', 'N', 'D', 'W', 'H', 'I', 'L', 'E'] => Some(TokenType::ENDWHILE),
+            _ => None
         }
     }
 }
@@ -205,6 +224,59 @@ impl Lexer {
                     Token::new(vec![last_char, self.cur_char], TokenType::EQEQ)
                 } else {
                     Token::new(vec![self.cur_char], TokenType::EQ)
+                }
+            },
+            '\"' => {
+                self.next_char();
+                let start_pos: usize = self.cur_pos.unwrap() as usize;
+
+                while self.cur_char != '\"' {
+                    if self.cur_char == '\r' 
+                        || self.cur_char == '\n' 
+                        || self.cur_char == '\t' 
+                        || self.cur_char == '\\' 
+                        || self.cur_char == '%' {
+                        panic!("[LEXER] ERROR: Illegal character in string.")
+                    }
+                    self.next_char();
+                }
+
+                let token_text = self.source[start_pos..self.cur_pos.unwrap() as usize].to_vec();
+                Token::new(token_text, TokenType::STRING)
+            },
+            '0'..='9' => {
+                let start_pos: usize = self.cur_pos.unwrap();
+
+                while self.peek().is_digit(RADIX) {
+                    self.next_char();
+                }
+
+                if self.peek() == '.' {
+                    self.next_char();
+
+                    if !self.peek().is_digit(RADIX) {
+                        panic!("[LEXER] ERROR: Illegal character in decimal.");
+                    }
+
+                    while self.peek().is_digit(RADIX) {
+                        self.next_char();
+                    }
+                }
+
+                let token_text = self.source[start_pos..=self.cur_pos.unwrap() as usize].to_vec();
+                Token::new(token_text, TokenType::NUMBER)
+            },
+            'A'..='Z' | 'a'..='z' => {
+                let start_pos: usize = self.cur_pos.unwrap() as usize;
+
+                while self.peek().is_alphanumeric() {
+                    self.next_char();
+                }
+
+                let token_text = self.source[start_pos..=self.cur_pos.unwrap() as usize].to_vec();
+                match Token::check_keyword(&token_text) {
+                    Some(keyword) => Token::new(token_text, keyword),
+                    None => Token::new(token_text, TokenType::IDENT)
                 }
             },
             '\n' => Token::new(vec![self.cur_char], TokenType::NEWLINE),
