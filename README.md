@@ -1,3 +1,5 @@
 # simple-compiler
 
-Simple TINY BASIC compiler written in rust.
+![workflow](https://github.com/github/docs/actions/workflows/rust.yml/badge.svg)
+
+Simple TINY BASIC transpiler to C written in rust.
