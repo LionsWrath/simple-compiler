@@ -1,6 +1,7 @@
 use std::fmt;
 
 const RADIX: u32 = 10;
+type RawSource = Vec<char>;
 
 pub enum TokenType {
 	EOF = -1,
@@ -35,19 +36,19 @@ pub enum TokenType {
 }
 
 pub struct Token {
-    pub text: Vec<char>,
+    pub text: RawSource,
     pub kind: TokenType
 }
 
 impl Token {
-    pub fn new(text: Vec<char>, kind: TokenType) -> Self {
+    pub fn new(text: RawSource, kind: TokenType) -> Self {
         Token {
             text,
             kind
         }
     }
 
-    pub fn check_keyword(text_token: &Vec<char>) -> Option<TokenType> {
+    pub fn check_keyword(text_token: &RawSource) -> Option<TokenType> {
         match text_token[..] {
             ['L', 'A', 'B','E', 'L'] => Some(TokenType::LABEL),
             ['G', 'O', 'T', 'O'] => Some(TokenType::GOTO),
@@ -109,14 +110,14 @@ impl fmt::Debug for TokenType {
 }
 
 pub struct Lexer {
-    pub source: Vec<char>,
+    pub source: RawSource,
     pub cur_char: char,
     pub cur_pos: Option<usize>,
 }
 
 impl Lexer {
 
-    pub fn new(source: Vec<char>) -> Self {
+    pub fn new(source: RawSource) -> Self {
         let mut lexer = Lexer {
            source,
            cur_char: '\0',
@@ -154,10 +155,6 @@ impl Lexer {
             },
             None => return '\0',
         }
-    }
-
-    pub fn abort(&self, message: String) {
-        panic!("[LEXER ERROR] {message}");
     }
 
     pub fn skip_whitespace(&mut self) {
