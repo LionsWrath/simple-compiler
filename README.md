@@ -4,6 +4,8 @@
 
 Simple TINY BASIC transpiler to C written in rust.
 
+## Tiny Basic Grammar
+
 ```
 program ::= {statement}
 statement ::= "PRINT" (expression | string) nl
