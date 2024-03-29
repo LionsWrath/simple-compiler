@@ -26,4 +26,12 @@ mod tests {
         assert!(matches!(res[2].kind, lex::TokenType::STRING));
     }
 
+    #[test]
+    fn test_operators() {
+        let res = get_tokens("src/examples/tests/test_2.txt");
+        assert!(matches!(res[0].kind, lex::TokenType::PLUS));
+        assert!(matches!(res[1].kind, lex::TokenType::GTEQ));
+        assert!(matches!(res[2].kind, lex::TokenType::EQEQ));
+        assert!(matches!(res[3].kind, lex::TokenType::EQ));
+    }
 }
