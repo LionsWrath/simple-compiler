@@ -34,4 +34,13 @@ mod tests {
         assert!(matches!(res[2].kind, lex::TokenType::EQEQ));
         assert!(matches!(res[3].kind, lex::TokenType::EQ));
     }
+
+    #[test]
+    fn test_ident() {
+        let res = get_tokens("src/examples/tests/test_3.txt");
+        assert!(matches!(res[0].kind, lex::TokenType::GOTO));
+        assert!(matches!(res[1].kind, lex::TokenType::IDENT));
+        assert!(matches!(res[2].kind, lex::TokenType::IDENT));
+        assert!(matches!(res[3].kind, lex::TokenType::IF));
+    }
 }
