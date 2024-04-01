@@ -1,12 +1,11 @@
 mod lex;
+mod parse;
 #[path = "utils/utils.rs"] mod utils;
 
 fn main() {
-    let mut lexer = lex::Lexer::new(utils::read_file("src/examples/file2.txt"));
-    let mut token = lexer.get_token();
+    let mut parser = parse::Parser::new(
+        lex::Lexer::new(utils::read_file("src/examples/file2.txt"))
+    );
 
-    while !matches!(token.kind, lex::TokenType::EOF) {
-        println!("{:?} POS: {:?}", token, lexer.cur_pos);
-        token = lexer.get_token();
-    }
+    parser.program()
 }
