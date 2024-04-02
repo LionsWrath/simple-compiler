@@ -3,6 +3,7 @@ use std::fmt;
 const RADIX: u32 = 10;
 type RawSource = Vec<char>;
 
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum TokenType {
 	EOF = -1,
 	NEWLINE = 0,
@@ -35,6 +36,7 @@ pub enum TokenType {
 	GTEQ = 211,
 }
 
+#[derive(Clone, PartialEq, Eq)]
 pub struct Token {
     pub text: RawSource,
     pub kind: TokenType

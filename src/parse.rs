@@ -9,7 +9,7 @@ pub struct Parser {
 
 impl Parser {
     
-    pub fn new(lexer: lex::Lexer) -> Self {
+    pub fn new(mut lexer: lex::Lexer) -> Self {
 
         let cur_token = lexer.get_token();
         let peek_token = lexer.get_token();
@@ -22,19 +22,18 @@ impl Parser {
     }
 
     fn check_token(&self, kind: lex::TokenType) -> bool {
-        matches!(self.cur_token.kind, kind)
+        self.cur_token.kind == kind
     }
 
     pub fn check_peek(&self, kind: lex::TokenType) -> bool {
-        matches!(self.peek_token, kind) 
-        
+        self.peek_token.kind == kind
     }
 
     pub fn match_token(&mut self, kind: lex::TokenType) {
         if !self.check_token(kind) {
 
             let current = self.cur_token.kind.to_string();
-            let expected = kind.to_string();
+            let expected = kind.clone().to_string();
 
             panic!("[PARSER] ERROR: Expecting token of type {expected}, got {current}")
         }
@@ -43,11 +42,11 @@ impl Parser {
     }
 
     pub fn next_token(&mut self) {
-        self.cur_token = self.peek_token;
+        self.cur_token = self.peek_token.clone();
         self.peek_token = self.lexer.get_token();
     }
 
     pub fn program(&self) {
-
+        println!("PROGRAM")
     }
 }
