@@ -46,7 +46,36 @@ impl Parser {
         self.peek_token = self.lexer.get_token();
     }
 
-    pub fn program(&self) {
+    pub fn program(&mut self) {
         println!("PROGRAM")
+    }
+
+    pub fn statement(&mut self) {
+
+        if self.check_token(lex::TokenType::PRINT) {
+            self.next_token();
+
+            if self.check_token(lex::TokenType::STRING) {
+                self.next_token();
+            } else {
+                self.expression();
+            }
+
+        }
+
+        self.nl()
+    }
+
+    pub fn nl(&mut self) {
+        println!("NEWLINE");
+
+        self.match_token(lex::TokenType::NEWLINE);
+        while self.check_token(lex::TokenType::NEWLINE) {
+            self.next_token();
+        }
+    }
+
+    pub fn expression(&self) {
+        println!("EXPRESSION");
     }
 }
