@@ -3,6 +3,7 @@ use std::fmt;
 const RADIX: u32 = 10;
 type RawSource = Vec<char>;
 
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum TokenType {
 	EOF = -1,
 	NEWLINE = 0,
@@ -35,6 +36,7 @@ pub enum TokenType {
 	GTEQ = 211,
 }
 
+#[derive(Clone, PartialEq, Eq)]
 pub struct Token {
     pub text: RawSource,
     pub kind: TokenType
@@ -75,37 +77,15 @@ impl fmt::Debug for Token {
     }
 }
 
+impl fmt::Display for TokenType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 impl fmt::Debug for TokenType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            TokenType::EOF => write!(f, "eof"),
-            TokenType::NEWLINE => write!(f, "newline"),
-            TokenType::NUMBER => write!(f, "number"),
-            TokenType::IDENT => write!(f, "ident"),
-            TokenType::STRING => write!(f, "string"),
-            TokenType::LABEL => write!(f, "label"),
-            TokenType::GOTO => write!(f, "goto"),
-            TokenType::PRINT => write!(f, "print"),
-            TokenType::INPUT => write!(f, "input"),
-            TokenType::LET => write!(f, "let"),
-            TokenType::IF => write!(f, "if"),
-            TokenType::THEN => write!(f, "then"),
-            TokenType::ENDIF => write!(f, "endif"),
-            TokenType::WHILE => write!(f, "while"),
-            TokenType::REPEAT => write!(f, "repeat"),
-            TokenType::ENDWHILE => write!(f, "endwhile"),
-            TokenType::EQ => write!(f, "eq"),
-            TokenType::PLUS => write!(f, "plus"),
-            TokenType::MINUS => write!(f, "minus"),
-            TokenType::ASTERISK => write!(f, "asterisk"),
-            TokenType::SLASH => write!(f, "slash"),
-            TokenType::EQEQ => write!(f, "eqeq"),
-            TokenType::NOTEQ => write!(f, "noteq"),
-            TokenType::LT => write!(f, "lt"),
-            TokenType::LTEQ => write!(f, "lteq"),
-            TokenType::GT => write!(f, "gt"),
-            TokenType::GTEQ => write!(f, "gteq"),
-        }
+        write!(f, "{}", self)
     }
 }
 
