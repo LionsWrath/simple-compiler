@@ -53,6 +53,7 @@ impl Parser {
     pub fn statement(&mut self) {
 
         if self.check_token(lex::TokenType::PRINT) {
+            println!("PRINT");
             self.next_token();
 
             if self.check_token(lex::TokenType::STRING) {
@@ -61,6 +62,31 @@ impl Parser {
                 self.expression();
             }
 
+        } else if self.check_token(lex::TokenType::IF) {
+            println!("IF");
+            self.next_token();
+            self.comparison();
+
+            self.match_token(lex::TokenType::THEN); 
+            self.nl();
+
+            while !self.check_token(lex::TokenType::ENDIF) {
+                self.statement()
+            }
+
+            self.match_token(lex::TokenType::ENDIF)
+        } else if self.check_token(lex::TokenType::WHILE) {
+            println!("WHILE")
+        } else if self.check_token(lex::TokenType::LABEL) {
+            println!("LABEL")
+        } else if self.check_token(lex::TokenType::GOTO) {
+            println!("GOTO")
+        } else if self.check_token(lex::TokenType::LET) {
+            println!("LET")
+        } else if self.check_token(lex::TokenType::INPUT) {
+            println!("INPUT")
+        } else {
+            panic!("[PARSER] Error: Token not valid!");
         }
 
         self.nl()
