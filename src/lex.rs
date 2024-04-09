@@ -3,7 +3,7 @@ use std::fmt;
 const RADIX: u32 = 10;
 type RawSource = Vec<char>;
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum TokenType {
 	EOF = -1,
 	NEWLINE = 0,
@@ -36,7 +36,7 @@ pub enum TokenType {
 	GTEQ = 211,
 }
 
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Debug)]
 pub struct Token {
     pub text: RawSource,
     pub kind: TokenType
@@ -68,24 +68,43 @@ impl Token {
     }
 }
 
-impl fmt::Debug for Token {
-    fn  fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("")
-            .field(&self.text)
-            .field(&self.kind)
-            .finish()
+impl fmt::Display for Token {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} {}", self.kind, self.text.iter().collect::<String>())
     }
 }
 
 impl fmt::Display for TokenType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:?}", self)
-    }
-}
-
-impl fmt::Debug for TokenType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self)
+        match self {
+            TokenType::EOF => write!(f, "EOF"),
+            TokenType::NEWLINE => write!(f, "NEWLINE"),
+            TokenType::NUMBER => write!(f, "NUMBER"),
+            TokenType::IDENT => write!(f, "IDENT"),
+            TokenType::STRING => write!(f, "STRING"),
+            TokenType::LABEL => write!(f, "LABEL"),
+            TokenType::GOTO => write!(f, "GOTO"),
+            TokenType::PRINT => write!(f, "PRINT"),
+            TokenType::INPUT => write!(f, "INPUT"),
+            TokenType::LET => write!(f, "LET"),
+            TokenType::IF => write!(f, "IF"),
+            TokenType::THEN => write!(f, "THEN"),
+            TokenType::ENDIF => write!(f, "ENDIF"),
+            TokenType::WHILE => write!(f, "WHILE"),
+            TokenType::REPEAT => write!(f, "REPEAT"),
+            TokenType::ENDWHILE => write!(f, "ENDWHILE"),
+            TokenType::EQ => write!(f, "EQ"),
+            TokenType::PLUS => write!(f, "PLUS"),
+            TokenType::MINUS => write!(f, "MINUS"),
+            TokenType::ASTERISK => write!(f, "ASTERISK"),
+            TokenType::SLASH => write!(f, "SLASH"),
+            TokenType::EQEQ => write!(f, "EQEQ"),
+            TokenType::NOTEQ => write!(f, "NOTEQ"),
+            TokenType::LT => write!(f, "LT"),
+            TokenType::LTEQ => write!(f, "LTEQ"),
+            TokenType::GT => write!(f, "GT"),
+            TokenType::GTEQ => write!(f, "GTEQ"),
+        }
     }
 }
 

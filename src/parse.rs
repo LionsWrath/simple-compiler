@@ -21,12 +21,22 @@ impl Parser {
         }
     }
 
-    fn check_token(&self, kind: lex::TokenType) -> bool {
+    pub fn check_token(&self, kind: lex::TokenType) -> bool {
         self.cur_token.kind == kind
     }
 
     pub fn check_peek(&self, kind: lex::TokenType) -> bool {
         self.peek_token.kind == kind
+    }
+
+    pub fn check_comparison_operator(&self) -> bool {
+        match self.cur_token.kind {
+            lex::TokenType::EQ | lex::TokenType::EQEQ 
+                | lex::TokenType::LT | lex::TokenType::LTEQ 
+                | lex::TokenType::GT | lex::TokenType::GTEQ 
+                | lex::TokenType::NOTEQ => true,
+            _ => false,
+        }
     }
 
     pub fn match_token(&mut self, kind: lex::TokenType) {
@@ -84,18 +94,18 @@ impl Parser {
 
             self.match_token(lex::TokenType::ENDIF)
         } else if self.check_token(lex::TokenType::WHILE) {
-            println!("WHILE")
+            println!("WHILE");
             self.next_token();
             self.comparison();
 
             self.match_token(lex::TokenType::REPEAT);
             self.nl();
 
-            while not self.check_token(lex::TokenType::ENDWHILE) {
+            while !self.check_token(lex::TokenType::ENDWHILE) {
                 self.statement();
             }
 
-            self.match_token(lex::TokenType:ENDWHILE);
+            self.match_token(lex::TokenType::ENDWHILE);
         } else if self.check_token(lex::TokenType::LABEL) {
             println!("LABEL");
             self.next_token();
@@ -130,11 +140,62 @@ impl Parser {
         }
     }
 
-    pub fn expression(&self) {
+    pub fn expression(&mut self) {
         println!("EXPRESSION");
+
+        self.term();
+
+        while self.check_token(lex::TokenType::PLUS) || self.check_token(lex::TokenType::MINUS) {
+            self.next_token();
+            self.term();
+        }
     }
 
-    pub fn comparison(&self) {
+    pub fn comparison(&mut self) {
         println!("COMPARISON");
+
+        self.expression();
+
+        if self.check_comparison_operator() {
+            self.next_token();
+            self.expression();
+        } else {
+            let current = self.cur_token.kind.to_string();
+            panic!("[PARSER] Error: Expected comparison operator at: {current}");
+        }
+    }
+
+    pub fn term(&mut self) {
+        println!("TERM");
+
+        self.unary();
+
+        while self.check_token(lex::TokenType::ASTERISK) || self.check_token(lex::TokenType::SLASH) {
+            self.next_token();
+            self.unary();
+        }
+    }
+
+    pub fn unary(&mut self) {
+        println!("UNARY");
+
+        if self.check_token(lex::TokenType::PLUS) || self.check_token(lex::TokenType::MINUS) {
+            self.next_token();
+        }
+
+        self.primary();
+    }
+
+    pub fn primary(&mut self) {
+        println!("PRIMARY ({})", self.cur_token.to_string());
+
+        if self.check_token(lex::TokenType::NUMBER) {
+            self.next_token();
+        } else if self.check_token(lex::TokenType::IDENT) {
+            self.next_token();
+        } else {
+            let current = self.cur_token.kind.to_string();
+            panic!("[PARSER] Error: Unexpected token at {current}");
+        }
     }
 }

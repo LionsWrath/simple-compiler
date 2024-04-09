@@ -8,8 +8,25 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_placeholder() {
-        assert!(True));
+    fn test_parser() {
+        let mut parser = parse::Parser::new(
+            lex::Lexer::new(utils::read_file("src/examples/tests/test_5.txt"))
+        );
+
+        parser.program();
+
+        assert!(true);
+    }
+
+    #[test]
+    fn test_equation() {
+        let mut parser = parse::Parser::new(
+            lex::Lexer::new(utils::read_file("src/examples/tests/test_6.txt"))
+        );
+
+        parser.program();
+
+        assert!(true);
     }
 
 }
