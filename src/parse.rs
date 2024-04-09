@@ -47,7 +47,15 @@ impl Parser {
     }
 
     pub fn program(&mut self) {
-        println!("PROGRAM")
+        println!("PROGRAM");
+
+        while self.check_token(lex::TokenType::NEWLINE) {
+            self.next_token();
+        }
+
+        while ! self.check_token(lex::TokenType::EOF) {
+            self.statement();
+        }
     }
 
     pub fn statement(&mut self) {
@@ -124,5 +132,9 @@ impl Parser {
 
     pub fn expression(&self) {
         println!("EXPRESSION");
+    }
+
+    pub fn comparison(&self) {
+        println!("COMPARISON");
     }
 }
