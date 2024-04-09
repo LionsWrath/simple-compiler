@@ -77,19 +77,40 @@ impl Parser {
             self.match_token(lex::TokenType::ENDIF)
         } else if self.check_token(lex::TokenType::WHILE) {
             println!("WHILE")
+            self.next_token();
+            self.comparison();
+
+            self.match_token(lex::TokenType::REPEAT);
+            self.nl();
+
+            while not self.check_token(lex::TokenType::ENDWHILE) {
+                self.statement();
+            }
+
+            self.match_token(lex::TokenType:ENDWHILE);
         } else if self.check_token(lex::TokenType::LABEL) {
-            println!("LABEL")
+            println!("LABEL");
+            self.next_token();
+            self.match_token(lex::TokenType::IDENT);
         } else if self.check_token(lex::TokenType::GOTO) {
-            println!("GOTO")
+            println!("GOTO");
+            self.next_token();
+            self.match_token(lex::TokenType::GOTO);
         } else if self.check_token(lex::TokenType::LET) {
-            println!("LET")
+            println!("LET");
+            self.next_token();
+            self.match_token(lex::TokenType::IDENT);
+            self.match_token(lex::TokenType::EQ);
+            self.expression();
         } else if self.check_token(lex::TokenType::INPUT) {
-            println!("INPUT")
+            println!("INPUT");
+            self.next_token();
+            self.match_token(lex::TokenType::IDENT);
         } else {
             panic!("[PARSER] Error: Token not valid!");
         }
 
-        self.nl()
+        self.nl();
     }
 
     pub fn nl(&mut self) {
