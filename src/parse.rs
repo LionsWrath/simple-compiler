@@ -1,10 +1,13 @@
-//mod lex;
+use std::collections::HashSet;
 use crate::lex;
 
 pub struct Parser {
     pub lexer: lex::Lexer,
     pub cur_token: lex::Token,
-    pub peek_token: lex::Token
+    pub peek_token: lex::Token,
+    pub symbols: HashSet<String>,
+    pub labels_declared: HashSet<String>,
+    pub labels_gotoed: HashSet<String>,
 }
 
 impl Parser {
@@ -13,11 +16,17 @@ impl Parser {
 
         let cur_token = lexer.get_token();
         let peek_token = lexer.get_token();
+        let symbols = HashSet::new();
+        let labels_declared = HashSet::new();
+        let labels_gotoed = HashSet::new();
 
         Parser{
             lexer,
             cur_token,
-            peek_token
+            peek_token,
+            symbols,
+            labels_declared,
+            labels_gotoed,
         }
     }
 
@@ -63,8 +72,14 @@ impl Parser {
             self.next_token();
         }
 
-        while ! self.check_token(lex::TokenType::EOF) {
+        while !self.check_token(lex::TokenType::EOF) {
             self.statement();
+        }
+
+        for label in self.labels_gotoed.iter() {
+            if !self.labels_declared.contains(label) {
+                panic!("[PARSER] Error: GOTO to undeclared label {label}")
+            }
         }
     }
 
@@ -109,20 +124,40 @@ impl Parser {
         } else if self.check_token(lex::TokenType::LABEL) {
             println!("LABEL");
             self.next_token();
+
+            let token_text = self.cur_token.get_text();
+            if self.labels_declared.contains(&token_text) {
+                panic!("[PARSER] Error: Label {token_text} already exists");
+            }
+
+            self.labels_declared.insert(token_text);
             self.match_token(lex::TokenType::IDENT);
         } else if self.check_token(lex::TokenType::GOTO) {
             println!("GOTO");
             self.next_token();
+            self.labels_declared.insert(self.cur_token.get_text());
             self.match_token(lex::TokenType::GOTO);
         } else if self.check_token(lex::TokenType::LET) {
             println!("LET");
             self.next_token();
+
+            let token_text = self.cur_token.get_text();
+            if !self.symbols.contains(&token_text) {
+                self.symbols.insert(token_text);
+            }
+
             self.match_token(lex::TokenType::IDENT);
             self.match_token(lex::TokenType::EQ);
             self.expression();
         } else if self.check_token(lex::TokenType::INPUT) {
             println!("INPUT");
             self.next_token();
+
+            let token_text = self.cur_token.get_text();
+            if !self.symbols.contains(&token_text) {
+                self.symbols.insert(token_text);
+            }
+
             self.match_token(lex::TokenType::IDENT);
         } else {
             panic!("[PARSER] Error: Token not valid!");
@@ -192,6 +227,12 @@ impl Parser {
         if self.check_token(lex::TokenType::NUMBER) {
             self.next_token();
         } else if self.check_token(lex::TokenType::IDENT) {
+
+            let token_text = self.cur_token.get_text();
+            if !self.symbols.contains(&token_text) {
+                panic!("[PARSER] Error: Refencing variable {token_text} before assignment");
+            }
+
             self.next_token();
         } else {
             let current = self.cur_token.kind.to_string();

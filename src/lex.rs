@@ -66,11 +66,15 @@ impl Token {
             _ => None
         }
     }
+
+    pub fn get_text(&self) -> String {
+        self.text.iter().collect::<String>()
+    }
 }
 
 impl fmt::Display for Token {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{} {}", self.kind, self.text.iter().collect::<String>())
+        write!(f, "{} {}", self.kind, self.get_text())
     }
 }
 

@@ -4,7 +4,7 @@ mod parse;
 
 fn main() {
     let mut parser = parse::Parser::new(
-        lex::Lexer::new(utils::read_file("src/examples/tests/test_6.txt"))
+        lex::Lexer::new(utils::read_file("src/examples/tests/test_8.txt"))
     );
 
     parser.program()

@@ -29,4 +29,25 @@ mod tests {
         assert!(true);
     }
 
+    #[test]
+    fn test_loop() {
+        let mut parser = parse::Parser::new(
+            lex::Lexer::new(utils::read_file("src/examples/tests/test_7.txt"))
+        );
+
+        parser.program();
+
+        assert!(true);
+    }
+
+    #[test]
+    fn test_validity() {
+        let mut parser = parse::Parser::new(
+            lex::Lexer::new(utils::read_file("src/examples/tests/test_8.txt"))
+        );
+
+        parser.program();
+
+        assert!(true);
+    }
 }
