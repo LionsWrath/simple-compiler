@@ -36,12 +36,12 @@ mod tests {
     #[test]
     fn test_average() {
         compile("src/examples/code/source/average.tb");
-        assert!(compare_files("src/examples/code/target/average.c"));
+        assert!(compare_files("src/examples/code/built/average.c"));
     }
 
     #[test]
     fn test_fibonacci() {
         compile("src/examples/code/source/fibonacci.tb");
-        assert!(compare_files("src/examples/code/target/fibonacci.c"));
+        assert!(compare_files("src/examples/code/built/fibonacci.c"));
     }
 }

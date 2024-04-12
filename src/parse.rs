@@ -47,6 +47,7 @@ impl Parser {
         }
     }
 
+    #[allow(dead_code)]
     pub fn emit(&mut self) {
         self.program();
         self.emitter.write_file();

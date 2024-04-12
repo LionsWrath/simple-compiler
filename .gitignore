@@ -15,3 +15,5 @@ Cargo.lock
 
 *.c
 *.out
+
+!src/examples/code/built/*.c

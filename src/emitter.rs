@@ -42,6 +42,7 @@ impl Emitter {
         self.header += "\n";
     }
 
+    #[allow(dead_code)]
     pub fn write_file(&self) {
         let mut f = match File::create(&self.full_path) {
             Ok(file) => file,
