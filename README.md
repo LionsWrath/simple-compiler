@@ -22,3 +22,18 @@ unary ::= ["+" | "-"] primary
 primary ::= number | ident
 nl ::= '\n'+
 ```
+
+## How to run
+
+Running only the compiler:
+
+```
+cargo run --release
+target/release/simple-compiler -i <input filename> -o <output filename>
+```
+
+If you have gcc installed, you can:
+
+```
+./build.sh <input filename>
+```

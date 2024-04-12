@@ -5,7 +5,10 @@ use std::path::PathBuf;
 pub fn read_file(filename: &PathBuf) -> Vec<char> {
     let mut f = match File::open(filename) {
         Ok(file) => file,
-        Err(err) => panic!("[UTILS] {err}"),
+        Err(err) => {
+            let path = filename.display();
+            panic!("[UTILS] {err} | {path}");
+        },
     };
 
     let mut raw: Vec<u8> = Vec::new();

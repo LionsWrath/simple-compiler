@@ -25,9 +25,6 @@ fn compare_files(filename: &str) -> bool {
    
     let o = read_file(&PathBuf::from(filepath.file_name().unwrap()));
     let i = read_file(&filepath);
-    
-    println!("{}", o.len());
-    println!("{}", i.len());
 
     o == i
 }
