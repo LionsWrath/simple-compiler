@@ -1,7 +1,8 @@
 use std::fs::File;
 use std::io::Read;
+use std::path::PathBuf;
 
-pub fn read_file(filename: &str) -> Vec<char> {
+pub fn read_file(filename: &PathBuf) -> Vec<char> {
     let mut f = match File::open(filename) {
         Ok(file) => file,
         Err(err) => panic!("[UTILS] {err}"),
