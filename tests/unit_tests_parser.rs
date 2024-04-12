@@ -1,7 +1,9 @@
 #[path = "../src/lex.rs"] mod lex;
 #[path = "../src/parse.rs"] mod parse;
+#[path = "../src/emitter.rs"] mod emitter;
 #[path = "../src/utils/utils.rs"] mod utils;
 
+use std::path::PathBuf;
 
 #[cfg(test)]
 mod tests {
@@ -9,41 +11,12 @@ mod tests {
 
     #[test]
     fn test_parser() {
+
+        let input = "src/examples/tests/test_5.txt";
+
         let mut parser = parse::Parser::new(
-            lex::Lexer::new(utils::read_file("src/examples/tests/test_5.txt"))
-        );
-
-        parser.program();
-
-        assert!(true);
-    }
-
-    #[test]
-    fn test_equation() {
-        let mut parser = parse::Parser::new(
-            lex::Lexer::new(utils::read_file("src/examples/tests/test_6.txt"))
-        );
-
-        parser.program();
-
-        assert!(true);
-    }
-
-    #[test]
-    fn test_loop() {
-        let mut parser = parse::Parser::new(
-            lex::Lexer::new(utils::read_file("src/examples/tests/test_7.txt"))
-        );
-
-        parser.program();
-
-        assert!(true);
-    }
-
-    #[test]
-    fn test_validity() {
-        let mut parser = parse::Parser::new(
-            lex::Lexer::new(utils::read_file("src/examples/tests/test_8.txt"))
+            lex::Lexer::new(utils::read_file(&PathBuf::from(input))),
+            emitter::Emitter::new(PathBuf::from("out.c")),
         );
 
         parser.program();

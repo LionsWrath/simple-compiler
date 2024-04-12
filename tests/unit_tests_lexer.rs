@@ -1,8 +1,12 @@
 #[path = "../src/lex.rs"] mod lex;
 #[path = "../src/utils/utils.rs"] mod utils;
 
+use std::path::PathBuf;
+
 fn get_tokens(filename: &str) -> Vec<lex::Token> {
-    let mut lexer = lex::Lexer::new(utils::read_file(filename));
+    let mut lexer = lex::Lexer::new(
+        utils::read_file(&PathBuf::from(filename))
+    );
     let mut token = lexer.get_token();
     let mut res: Vec<lex::Token> = Vec::new();
 
